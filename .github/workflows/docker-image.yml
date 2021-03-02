@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  create:
+    tag:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build -t ssm-agent:${GITHUB_REF##*/}      
+    - name: Tag the Docker image
+      run: docker tag ssm-agent:${GITHUB_REF##*/} julioback/ssm-agent:${GITHUB_REF##*/}
+    - name: Docker login
+      run: docker login --username=juliocesarback --password=
+    - name: Docker push
+      run: docker push julioback/ssm-agent:${GITHUB_REF##*/}
